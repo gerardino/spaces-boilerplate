@@ -17,5 +17,5 @@
 
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
+import 'initializers/turbolinks.js'
 
-console.log('Hello World from Webpacker')
