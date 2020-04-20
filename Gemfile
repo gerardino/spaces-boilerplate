@@ -44,3 +44,5 @@ gem 'devise_token_auth'
 gem 'omniauth-google-oauth2'
 
 gem 'dotenv-rails', groups: [:development, :test]
+
+gem 'webpacker', '~> 5.x'
