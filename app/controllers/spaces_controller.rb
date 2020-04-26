@@ -1,4 +1,4 @@
-class SpacesController < ApplicationController
+class SpacesController < ApplicationControllerApi
   before_action :set_space, only: [:show, :update, :destroy]
 
   # GET /spaces
