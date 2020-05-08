@@ -19,21 +19,21 @@ const SpaceStore = {
   },
   actions: {
     delete(context) { },
-    update(context, { space }) { 
-      return axios.patch(`space.json`, space)
-        .then(() => {
-          context.commit('set', { space });
-        });
-     },
-    create(context, { space }) { 
-      return axios.post(`space.json`, space)
+    update(context, { space }) {
+      return axios.patch(`/spaces.json`, space)
         .then(() => {
           context.commit('set', { space });
         });
     },
-    get(context, id) {
-      return axios.get(`space/${id}.json`)
-        .then(data => {
+    create(context, { space }) {
+      return axios.post(`/spaces.json`, space)
+        .then(() => {
+          context.commit('set', { space });
+        });
+    },
+    get(context, { id }) {
+      return axios.get(`/spaces/${id}.json`)
+        .then(({ data }) => {
           context.commit('set', { space: data });
         });
     },

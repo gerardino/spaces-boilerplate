@@ -26,6 +26,8 @@ import store from './vuex'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 import VueMaterial from 'vue-material'
+import router from './routes.js';
+
 
 Vue.use(TurbolinksAdapter)
 Vue.use(VueMaterial)
@@ -34,6 +36,7 @@ document.addEventListener('turbolinks:load', () => {
   const app = new Vue({
     el: '#vue-app-container',
     store,
+    router,
     components: { App }
   })
 })
