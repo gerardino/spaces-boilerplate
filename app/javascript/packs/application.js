@@ -19,3 +19,21 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import 'initializers/turbolinks.js'
 
+import TurbolinksAdapter from 'vue-turbolinks'
+import Vue from 'vue/dist/vue.esm'
+import App from './app.vue'
+import store from './vuex'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
+import VueMaterial from 'vue-material'
+
+Vue.use(TurbolinksAdapter)
+Vue.use(VueMaterial)
+
+document.addEventListener('turbolinks:load', () => {
+  const app = new Vue({
+    el: '#vue-app-container',
+    store,
+    components: { App }
+  })
+})
