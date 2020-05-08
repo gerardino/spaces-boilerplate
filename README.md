@@ -11,6 +11,22 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 ```
 
+## Running
+
+### Development
+
+* Start Rails server
+
+  ```bash
+  rails s
+  ```
+
+* Start webpack
+
+  ```bash
+  ./bin/webpack-dev-server
+  ```
+
 ## README
 
 This README would normally document whatever steps are necessary to get the
