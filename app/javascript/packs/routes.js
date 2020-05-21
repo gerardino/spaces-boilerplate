@@ -10,6 +10,7 @@ import Space from './components/spaces/show.vue';
 
 const router = new VueRouter({
   mode: 'history',
+  base: '/app',
   // base: `${I18n.prefix}`,
   routes: [
     { path: '/', component: Spaces, name: 'spaces' },

@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
-  def index
-    render template: 'home/index'
+  def frontpage
+  end
+
+  def application
   end
 end
