@@ -46,3 +46,6 @@ gem 'omniauth-google-oauth2'
 gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'webpacker', '~> 5.x'
+
+gem 'solargraph', group: :development
+gem 'rubocop', group: :development
