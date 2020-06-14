@@ -5,9 +5,7 @@
         <div class="md-toolbar-section-start"></div>
 
         <div class="md-toolbar-section-end">
-          <md-button @click="login" class="md-button">
-            Sign in
-          </md-button>
+          <md-button @click="login" class="md-button">Sign in</md-button>
         </div>
       </div>
 
@@ -25,26 +23,25 @@
 export default {
   methods: {
     login() {
-      // console.log("here");
-      window.location.href='/auth/google_oauth2';
+      window.location.href = `/auth/google_oauth2?auth_origin_url=${window.location.protocol}//${window.location.host}/app`;
     }
   }
 };
 </script>
 
 <style scoped>
-  .md-app {
-    /* max-height: 400px; */
-    border: 1px solid rgba(#000, .12);
-  }
+.md-app {
+  /* max-height: 400px; */
+  border: 1px solid rgba(#000, 0.12);
+}
 
-  .md-app-toolbar {
-    height: 196px;
-    width: 100%;
-  }
+.md-app-toolbar {
+  height: 196px;
+  width: 100%;
+}
 
-  .md-drawer {
-    width: 230px;
-    max-width: calc(100vw - 125px);
-  }
+.md-drawer {
+  width: 230px;
+  max-width: calc(100vw - 125px);
+}
 </style>

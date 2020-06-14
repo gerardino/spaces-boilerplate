@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module Overrides
   class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
+    # https://github.com/lynndylanhurley/devise_token_auth/issues/1020
     def assign_provider_attrs(user, auth_hash)
-      all_attrs = auth_hash["info"].slice(*user.attributes.keys)
+      all_attrs = auth_hash['info'].slice(*user.attributes.keys)
       orig_val = ActionController::Parameters.permit_all_parameters
       ActionController::Parameters.permit_all_parameters = true
       permitted_attrs = ActionController::Parameters.new(all_attrs)
