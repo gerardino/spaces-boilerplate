@@ -23,13 +23,17 @@ import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
 import App from './app.vue'
 import store from './vuex'
+import router from './routes.js';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
+// vue-material
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 import VueMaterial from 'vue-material'
-import router from './routes.js';
-
 
 Vue.use(TurbolinksAdapter)
+Vue.use(VueAxios, axios);
 Vue.use(VueMaterial)
 
 document.addEventListener('turbolinks:load', () => {

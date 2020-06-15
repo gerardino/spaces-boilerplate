@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const SpacesStore = {
   namespaced: true,
   state: {
@@ -9,14 +7,14 @@ const SpacesStore = {
     list: state => state.list
   },
   mutations: {
-    add(state, {space}) {
+    add(state, { space }) {
       state.list.push(space);
       return state;
     },
     remove(state, { id }) {
       const index = state.list.find(s => s.id === id)
       if (index === -1) { return state }
-      
+
       state.list.splice(index, 1)
       return state
     },
@@ -27,10 +25,10 @@ const SpacesStore = {
     }
   },
   actions: {
-    refresh(context, query) {
-      return axios.get(`/spaces.json`)
+    refresh(context) {
+      return this._vm.axios.get(`/spaces.json`)
         .then(data => {
-          context.commit('resetTo', {list: data.data})
+          context.commit('resetTo', { list: data.data })
         })
     },
   }
