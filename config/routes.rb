@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   # resources :spaces, to: 'home#application'
 
-  get '/app', to: 'home#application'
-
   root to: 'home#frontpage'
+
+  get '*app', to: 'home#application'
 end
