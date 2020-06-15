@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+
 class SpacesController < ApplicationControllerApi
-  before_action :set_space, only: [:show, :update, :destroy]
+  include DeviseTokenAuth::Concerns::SetUserByToken
+
+  before_action :set_space, only: %i[show update destroy]
+  before_action :authenticate_user!
 
   # GET /spaces
   def index
@@ -39,13 +44,14 @@ class SpacesController < ApplicationControllerApi
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_space
-      @space = Space.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def space_params
-      params.require(:space).permit(:name, :user_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_space
+    @space = Space.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def space_params
+    params.require(:space).permit(:name, :user_id)
+  end
 end
