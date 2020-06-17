@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'overrides/omniauth_callbacks'
   }
   resources :spaces, constraints: ->(req) { req.format == :json }
+  get 'user/current(.:format)', to: 'user#current', constraints: ->(req) { req.format == :json }
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   # resources :spaces, to: 'home#application'

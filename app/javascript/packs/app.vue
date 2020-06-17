@@ -5,7 +5,9 @@
     </md-app-toolbar>
 
     <md-app-drawer md-permanent="full">
-      <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
+      <md-toolbar class="md-transparent" md-elevation="0">
+        <app-user-avatar :user="user"></app-user-avatar>
+      </md-toolbar>
 
       <md-list>
         <md-list-item>
@@ -32,7 +34,17 @@
 </template>
 
 <script>
+import AppUserAvatar from "./components/AppUserAvatar";
+
 export default {
+  components: {
+    AppUserAvatar
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
   methods: {
     everything() {
       this.$router.push({ name: "spaces" });
@@ -45,12 +57,14 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("auth/loadCredentials");
+    this.$store.dispatch("auth/loadCredentials").then(() => {
+      this.$store.dispatch("user/load");
+    });
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .md-drawer {
   width: 230px;
   max-width: calc(100vw - 125px);
