@@ -55,11 +55,6 @@ export default {
     shared() {
       this.$router.push({ name: "spaces" });
     }
-  },
-  created() {
-    this.$store.dispatch("auth/loadCredentials").then(() => {
-      this.$store.dispatch("user/load");
-    });
   }
 };
 </script>

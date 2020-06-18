@@ -41,6 +41,10 @@ document.addEventListener('turbolinks:load', () => {
     el: '#vue-app-container',
     store,
     router,
-    components: { App }
+    components: { App },
+    async beforeCreate() {
+      await this.$store.dispatch("auth/loadCredentials");
+      await this.$store.dispatch("user/load");
+    }
   })
 })
