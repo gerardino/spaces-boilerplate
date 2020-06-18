@@ -14,8 +14,8 @@ export default {
       return this.$store.state.spaces.list;
     }
   },
-  mounted() {
-    this.$store.dispatch("spaces/refresh");
+  async mounted() {
+    await this.$store.dispatch("spaces/refresh");
   }
 };
 </script>
