@@ -1,19 +1,14 @@
-import { Credentials } from '../../lib/authentication';
+import { Credentials, STORAGE_KEY } from '../../lib/authentication';
 
 const AuthenticationStore = {
   namespaced: true,
   state: new Credentials({}),
-  getters: {
-    token: state => state.token
-  },
   mutations: {
     setCredentials(state, newCredentials) {
       state.token = newCredentials.token;
       state.client = newCredentials.client;
       state.expiry = newCredentials.expiry;
       state.uid = newCredentials.uid;
-
-
     },
     resetToken(state) {
       state.token = state.client = state.expiry = state.uid = null;
@@ -21,20 +16,32 @@ const AuthenticationStore = {
   },
   actions: {
     loadCredentials({ commit, dispatch }) {
-      const credentials = Credentials.getAuthenticationCredentials();
+      const fromLocal = Credentials.getCredentialsFromStore();
+      const fromSearch = Credentials.getCredentialsFromUrl();
+      let credentials = null;
+
+      if (fromLocal && fromSearch) {
+        credentials = fromLocal.getNewest(fromSearch);
+      } else {
+        credentials = fromLocal || fromSearch;
+      }
 
       if (credentials) {
         commit('setCredentials', credentials);
-        dispatch('setAuthenticationHeaders');
-      } else {
-        window.location = '/';
+      } else if (fromLocal !== null && fromLocal !== undefined) {
+        dispatch('clearCredentials');
       }
     },
-    setAuthenticationHeaders({ state }) {
-      this._vm.axios.defaults.headers.common["access-token"] = state.token;
-      this._vm.axios.defaults.headers.common["client"] = state.client;
-      this._vm.axios.defaults.headers.common["expiry"] = state.expiry;
-      this._vm.axios.defaults.headers.common["uid"] = state.uid;
+    saveCredentials({ state }) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.toStoreHash()));
+      dispatch('setAuthHeaders');
+      dispatch('saveCredentials');
+    },
+    clearCredentials() {
+      localStorage.removeItem(Credentials.STORAGE_KEY);
+    },
+    setAuthHeaders({ state }) {
+      Object.assign(this._vm.axios.defaults.headers.common, state.toAxiosHash());
     }
   }
 };

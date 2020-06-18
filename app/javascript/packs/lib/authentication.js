@@ -1,12 +1,54 @@
 
-const STORAGE_KEY = 'credentials';
+const STORAGE_KEY = 'credentials',
+  READ_STORE_KEYS = {
+    'auth_token': 'token',
+    'client_id': 'client',
+    'expiry': 'expiry',
+    'uid': 'uid'
+  },
+  WRITE_STORE_KEYS = {
+    'token': 'access_token',
+    'client': 'client_id',
+    'expiry': 'expiry',
+    'uid': 'uid'
+  }, WRITE_AXIOS_KEYS = {
+    'token': 'access-token',
+    'client': 'client',
+    'expiry': 'expiry',
+    'uid': 'uid'
+  };
+
+function translateHash({ map, payload }) {
+  const translation = {};
+  Object.keys(map).forEach(k => {
+    const newK = map[k];
+    translation[newK] = payload[k];
+  });
+
+  return translation;
+}
 
 class Credentials {
-  constructor({ token, client, expiry, uid }) {
+  constructor(payload) {
+    const { token, client, expiry, uid } = translateHash({ map: READ_STORE_KEYS, payload });
+
     this.token = token;
     this.client = client;
     this.expiry = expiry;
     this.uid = uid;
+  }
+
+  isValid() {
+    return this.token && this.uid && this.expiry
+      && this.expiry > Math.floor((new Date()).getTime() / 1000);
+  }
+
+  toAxiosHash() {
+    return translateHash({ map: WRITE_AXIOS_KEYS, payload: this });
+  }
+
+  toStoreHash() {
+    return translateHash({ map: WRITE_STORE_KEYS, payload: this });
   }
 
   saveInLocalStorage() {
@@ -17,12 +59,18 @@ class Credentials {
     localStorage.removeItem(STORAGE_KEY);
   }
 
+  isNewerThan(credentials) {
+    return this.expiry > credentials.expiry;
+  }
+
+  getNewest(credentials) {
+    return this.isNewerThan(credentials) ? this : credentials;
+  }
+
   static getCredentialsFromStore() {
     try {
       const credentials = new Credentials(JSON.parse(localStorage.getItem(STORAGE_KEY)));
-      if (credentials.token && credentials.uid && credentials.expiry) {
-        return credentials;
-      }
+      return credentials.isValid() ? credentials : null;
     } catch (error) { }
 
     return null;
@@ -32,39 +80,20 @@ class Credentials {
     // getting authentication token
     const searchParameters = new URLSearchParams(window.location.search);
     const token = searchParameters.get("auth_token");
-    const client = searchParameters.get("client_id");
+    const client_id = searchParameters.get("client_id");
     const expiry = searchParameters.get("expiry");
     const uid = searchParameters.get("uid");
 
-    if (token && client && expiry) {
-      return new Credentials({ token, client, expiry, uid });
-    } else {
-      return null;
-    }
-  }
+    const credentials = new Credentials({
+      'auth_token': token,
+      client_id,
+      expiry,
+      uid
+    });
 
-  static getAuthenticationCredentials() {
-    const fromLocal = Credentials.getCredentialsFromStore();
-    const fromSearch = Credentials.getCredentialsFromUrl();
-    let credentials = null;
-
-    if (fromLocal && fromSearch) {
-      credentials = fromLocal.expiry > fromSearch.expiry ? fromLocal : fromSearch;
-    } else {
-      credentials = fromLocal || fromSearch;
-    }
-
-    if (credentials) {
-      if (credentials.expiry < Math.floor((new Date()).getTime() / 1000)) {
-        credentials.clearFromStorage();
-        credentials = null;
-      } else {
-        credentials.saveInLocalStorage();
-      }
-    }
-
-    return credentials;
+    return credentials.isValid() ? credentials : null;
   }
 }
 
 module.exports.Credentials = Credentials;
+module.exports.STORAGE_KEY = STORAGE_KEY;
